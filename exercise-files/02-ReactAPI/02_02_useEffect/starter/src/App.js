@@ -100,7 +100,7 @@ function Result({result,input}) {
 function App() {
   const [values, setValues] = useState({ random1: 0, random2: 0 });
   const [input, setInput] = useState(0);
-  const [result, setResult] = useState(0);
+  const [result, checkResult] = useState(0);
 
   const generateRandomValues = () => {
     const random1 = Math.floor(Math.random() * 50);
