@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 
 /*
@@ -74,7 +74,16 @@ function Form({ generate, guess, onChange, values }) {
   );
 }
 
-function Result() {
+function Result({result,input}) {
+  const [message,setMessage]=useState("");
+   useEffect(()=>{
+    const answer=result===parseInt(input);
+     setMessage(answer ? "You guessed right!" : "Try Again : (")
+     if (!result) {
+       setMessage("");
+     }
+   }
+   ,[])
   return (
     <div
       className="d-flex flex-column justify-content-between"
