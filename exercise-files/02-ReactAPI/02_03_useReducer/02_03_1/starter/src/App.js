@@ -1,4 +1,4 @@
-import { useState, useEffect, useReducer } from "react";
+import { useEffect, useReducer } from "react";
 import "./App.css";
 
 /*
@@ -96,18 +96,37 @@ function Result({ result, input }) {
     </div>
   );
 }
+
+const initialState = {
+  values: { random1: 0, random2: 0 },
+  input: 0,
+  result: ""
+}
+function reducer(state, action) {
+  switch (action.type) {
+    case 'setValues':
+      return { ...state, values: action.payload }
+    case 'setInput':
+      return { ...state, input: action.payload }
+    case 'checkResult':
+      return { ...state, result: action.payload }
+    default:
+      return state;
+  }
+}
+
+
+
 function App() {
-  const [values, setValues] = useState({ random1: 0, random2: 0 });
-  const [input, setInput] = useState(0);
-  const [result, checkResult] = useState("");
+  const { state, dispatch } = useReducer(reducer, initialState)
   const generateRandomValues = () => {
     const random1 = Math.floor(Math.random() * 50);
     const random2 = Math.floor(Math.random() * 50);
-    setValues({ random1, random2 });
-    checkResult("");
+
+    dispatch({ type: 'setValues', payload: { random1, random2 } })
   };
   const guessTheNumber = () => {
-    checkResult(values.random1 + values.random2);
+    dispatch({ type: 'checkResult', payload: { results: state.values.random1 + state.values.random2 } });
   };
 
   return (
@@ -119,10 +138,10 @@ function App() {
           <Form
             generate={generateRandomValues}
             guess={guessTheNumber}
-            onChange={setInput}
-            values={values}
+            onChange={value => dispatch({ type: 'setInput', payload: { input: value } })}
+            values={state.values}
           />
-          <Result result={result} input={input} />
+          <Result result={state.result} input={state.input} />
         </div>
       </fieldset>
     </div>
